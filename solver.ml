@@ -263,13 +263,13 @@ let make_rules orig_str : production list =
   in
   String.split_on_char '\n' orig_str
     |> List.to_seq
-    |> Seq.map (Str.split (Str.regexp " :== "))
+    |> Seq.map (Batteries.String.nsplit ~by:" :== ")
     |> Seq.filter_map (function | (lhs :: rhs :: []) -> Some (lhs, rhs)
                                 | [] -> None
                                 | _ -> assert false)
     |> Seq.map (fun (lhs, rhs) ->
          (assert (String.length lhs = 1); String.get lhs 0,
-          Str.split (Str.regexp " | ") rhs))
+          Batteries.String.nsplit rhs ~by:" | "))
     |> Seq.flat_map separate_same_nt
     |> Seq.map (fun (nt, rhs) -> (nt, classify rhs))
     |> List.of_seq

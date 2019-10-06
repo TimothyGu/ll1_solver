@@ -5,5 +5,5 @@
 
 (library
  (name solver)
- (libraries str)
+ (libraries batteries)
  (modules Solver))
