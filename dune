@@ -1,6 +1,9 @@
 (executable
+ (name main)
+ (libraries batteries solver)
+ (modules Main))
+
+(library
  (name solver)
- (libraries batteries str))
-(install
- (section bin)
- (files (solver.exe as ll1_solver)))
+ (libraries str)
+ (modules Solver))
