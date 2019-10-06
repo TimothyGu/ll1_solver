@@ -1,0 +1,6 @@
+(executable
+ (name solver)
+ (libraries batteries str))
+(install
+ (section bin)
+ (files (solver.exe as ll1_solver)))
