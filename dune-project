@@ -1,5 +1,5 @@
 (lang dune 1.11)
 (name ll1_solver)
-(license MIT)
+(license LGPL-2.1-or-later)
 (authors "Timothy Gu")
 (maintainers "timothygu99@gmail.com")
