@@ -1,9 +1,16 @@
 (executable
  (name main)
- (libraries batteries solver)
+ (libraries base solver stdio)
  (modules Main))
 
 (library
  (name solver)
- (libraries batteries)
- (modules Solver))
+ (libraries base nsplit)
+ (modules Solver)
+ (ppx_runtime_libraries ppx_compare ppx_sexp_conv)
+ (preprocess (pps ppx_deriving.std ppx_compare ppx_sexp_conv)))
+
+(library
+ (name nsplit)
+ (libraries base)
+ (modules Nsplit))
