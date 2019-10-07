@@ -40,13 +40,13 @@ let extract_name = function
   | N nt -> nt
   | T t -> t
 
-type nonterminal_set = (NonTerminal.t, NonTerminal.comparator_witness) Set.t
-type terminal_set = (Terminal.t, Terminal.comparator_witness) Set.t
+type nonterminal_set = Set.M(NonTerminal).t
+type terminal_set = Set.M(Terminal).t
 
-type nullable_map = (NonTerminal.t, bool, NonTerminal.comparator_witness) Map.t
+type nullable_map = bool Map.M(NonTerminal).t
 let nullable_map_equal = Map.equal Bool.equal
 
-type nullable_dependency_map = (NonTerminal.t, nonterminal_set list, NonTerminal.comparator_witness) Map.t
+type nullable_dependency_map = nonterminal_set list Map.M(NonTerminal).t
 
 let append_nullable_dep nt (l : symbol list) (deps_map : nullable_dependency_map) =
   let nts : nonterminal_set =
@@ -90,15 +90,10 @@ let make_nullables (prods : production list) : nullable_map =
   compute_fixed_point updater init_map nullable_map_equal
 
 type ('k, 'kcomp, 'v, 'vcomp) set_map = ('k, ('v, 'vcomp) Set.t, 'kcomp) Map.t
-
-type terminal_set_map =
-  (nonterminal, NonTerminal.comparator_witness,
-   terminal, Terminal.comparator_witness) set_map
 let set_map_equal = Map.equal Set.equal
 
-type nonterminal_set_map =
-  (nonterminal, NonTerminal.comparator_witness,
-   nonterminal, NonTerminal.comparator_witness) set_map
+type terminal_set_map = Set.M(Terminal).t Map.M(NonTerminal).t
+type nonterminal_set_map = Set.M(NonTerminal).t Map.M(NonTerminal).t
 
 let union_set_map (map : ('k, 'kcomp, 'v, 'vcomp) set_map) key set =
   let updater = function
