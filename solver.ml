@@ -8,7 +8,7 @@ type terminal = Terminal.t
 module Symbol = struct
   module T = struct
     type t = N of NonTerminal.t | T of Terminal.t
-    [@@deriving compare, sexp_of]
+    [@@deriving compare, sexp]
   end
   include T
   include Comparator.Make(T)
@@ -18,7 +18,7 @@ type symbol = Symbol.t = N of NonTerminal.t | T of Terminal.t
 module SymbolList = struct
   module T = struct
     type t = Symbol.t list
-    [@@deriving compare, sexp_of]
+    [@@deriving compare, sexp]
   end
   include T
   include Comparator.Make(T)
@@ -40,13 +40,14 @@ let extract_name = function
   | N nt -> nt
   | T t -> t
 
-type nonterminal_set = Set.M(NonTerminal).t
-type terminal_set = Set.M(Terminal).t
+type nonterminal_set = Set.M(NonTerminal).t [@@deriving sexp]
+type terminal_set = Set.M(Terminal).t [@@deriving sexp]
 
-type nullable_map = bool Map.M(NonTerminal).t
+type nullable_map = bool Map.M(NonTerminal).t [@@deriving sexp]
 let nullable_map_equal = Map.equal Bool.equal
 
 type nullable_dependency_map = nonterminal_set list Map.M(NonTerminal).t
+                               [@@deriving sexp]
 
 let append_nullable_dep nt (l : symbol list) (deps_map : nullable_dependency_map) =
   let nts : nonterminal_set =
@@ -92,8 +93,9 @@ let make_nullables (prods : production list) : nullable_map =
 type ('k, 'kcomp, 'v, 'vcomp) set_map = ('k, ('v, 'vcomp) Set.t, 'kcomp) Map.t
 let set_map_equal = Map.equal Set.equal
 
-type terminal_set_map = Set.M(Terminal).t Map.M(NonTerminal).t
+type terminal_set_map = Set.M(Terminal).t Map.M(NonTerminal).t [@@deriving sexp]
 type nonterminal_set_map = Set.M(NonTerminal).t Map.M(NonTerminal).t
+                           [@@deriving sexp]
 
 let union_set_map (map : ('k, 'kcomp, 'v, 'vcomp) set_map) key set =
   let updater = function
@@ -208,13 +210,13 @@ let make_follow_set (nullable_map : nullable_map)
 module ParsingTableEntry = struct
   module T = struct
     type t = NonTerminal.t * Terminal.t
-    [@@deriving compare, sexp_of]
+    [@@deriving compare, sexp]
   end
   include T
   include Comparator.Make(T)
 end
-type parsing_table = (ParsingTableEntry.t, ParsingTableEntry.comparator_witness,
-                      SymbolList.t, SymbolList.comparator_witness) set_map
+type parsing_table = Set.M(SymbolList).t Map.M(ParsingTableEntry).t
+                     [@@deriving sexp]
 
 let make_ll1_table (nullable_map : nullable_map)
                    (first_set_map : terminal_set_map)
