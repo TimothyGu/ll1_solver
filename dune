@@ -1,7 +1,8 @@
 (executable
  (name main)
  (libraries base solver stdio)
- (modules Main))
+ (modules Main)
+ (preprocess (pps ppx_deriving.std ppx_compare ppx_sexp_conv)))
 
 (library
  (name solver)
@@ -13,4 +14,5 @@
 (library
  (name nsplit)
  (libraries base)
- (modules Nsplit))
+ (modules Nsplit)
+ (preprocess (pps ppx_deriving.std ppx_compare ppx_sexp_conv)))
