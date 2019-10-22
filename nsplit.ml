@@ -1,7 +1,8 @@
 (* Adapted from
  * https://github.com/ocaml-batteries-team/batteries-included/blob/2e73d11628627010edb5ac463581db36296d19a3/src/batString.mlv
- * to use base rather than the built-in OCaml standard library. Licensed under
- * LGPL version 2.1 or later. *)
+ * to use base rather than the built-in OCaml standard library, in October 2019.
+ *
+ * Licensed under LGPL version 2.1 or later. *)
 
 open Base
 
