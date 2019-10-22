@@ -155,6 +155,7 @@ let make_first_set (nullable_map : nullable_map) (prods : production list) :
         let map' = add_set_map (module Terminal) map ~key:nt ~data:rhs_t in
         _make_initial map' deps_map tl_prods
     | (nt, N rhs_nt :: rhs_rest) :: tl_prods ->
+        let map' = ensure_set_map (module Terminal) map nt in
         let deps_map' =
           add_set_map (module NonTerminal) deps_map ~key:nt ~data:rhs_nt
         in
@@ -162,7 +163,7 @@ let make_first_set (nullable_map : nullable_map) (prods : production list) :
           if Map.find_exn nullable_map rhs_nt then (nt, rhs_rest) :: tl_prods
           else tl_prods
         in
-        _make_initial map deps_map' prods'
+        _make_initial map' deps_map' prods'
   in
   let init_map, deps_map =
     _make_initial
